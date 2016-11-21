@@ -1,14 +1,23 @@
 ﻿<Page
-    x:Class="GPSAlarm.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:GPSAlarm"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    x:Class="GPSAlarm.MainPage"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+
+        <Maps:MapControl 
+            x:Name="mainMap"
+            
+            MapServiceToken="RrElPnhV_FQngx4Oy24m_A" 
+            Loaded="mainMap_Loaded"
+           
+            />
 
     </Grid>
 </Page>

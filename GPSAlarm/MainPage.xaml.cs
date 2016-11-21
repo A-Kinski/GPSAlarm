@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Controls.Maps;
+using Windows.Devices.Geolocation;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -25,7 +27,7 @@ namespace GPSAlarm
         public MainPage()
         {
             this.InitializeComponent();
-
+            
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
@@ -36,7 +38,33 @@ namespace GPSAlarm
         /// Этот параметр обычно используется для настройки страницы.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Coordinate coord = new Coordinate();
+           // Coordinate coord = new Coordinate();
+
+            mapSeetings();
+        }
+
+        private void mapSeetings()
+        {
+            //mainMap.ZoomInteractionMode = MapInteractionMode.GestureAndControl;
+            //mainMap.TiltInteractionMode = MapInteractionMode.GestureAndControl;
+
+            BasicGeoposition cityPosition = new BasicGeoposition() { Latitude = 47.604, Longitude = -122.32 };
+            Geopoint cityCenter = new Geopoint(cityPosition);
+
+            mainMap.Center = cityCenter;
+            mainMap.ZoomLevel = 12;
+            mainMap.LandmarksVisible = true;
+            mainMap.Heading = 0;
+            mainMap.DesiredPitch = 0;
+            mainMap.Style = MapStyle.AerialWithRoads;
+            mainMap.ColorScheme = MapColorScheme.Light;
+        }
+
+  
+
+        private void mainMap_Loaded(object sender, RoutedEventArgs e)
+        {
+            string str = "";
         }
     }
 }
