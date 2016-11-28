@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.Devices.Geolocation;
+using Windows.Storage;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -24,6 +25,8 @@ namespace GPSAlarm
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private Coordinate coord;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -38,20 +41,23 @@ namespace GPSAlarm
         /// Этот параметр обычно используется для настройки страницы.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-           // Coordinate coord = new Coordinate();
+           coord = new Coordinate();
 
-            mapSeetings();
+           mapSeetings(coord.GetCoordinate());
         }
 
-        private void mapSeetings()
+        private async void mapSeetings(List<Double> geoCoordinate)
         {
-            //mainMap.ZoomInteractionMode = MapInteractionMode.GestureAndControl;
-            //mainMap.TiltInteractionMode = MapInteractionMode.GestureAndControl;
+            //TODO сделать настроку карты в соответсвии с моей текущей позицией - как в примере на msdn
+            Geolocator geolocator = new Geolocator();
+            Geoposition pos = await geolocator.GetGeopositionAsync();
+            Geopoint currentLocation = pos.Coordinate.Point;
 
-            BasicGeoposition cityPosition = new BasicGeoposition() { Latitude = 47.604, Longitude = -122.32 };
-            Geopoint cityCenter = new Geopoint(cityPosition);
 
-            mainMap.Center = cityCenter;
+            //BasicGeoposition cityPosition = new BasicGeoposition() { Latitude = geoCoordinate[0], Longitude = geoCoordinate[1] };
+            //Geopoint cityCenter = new Geopoint(cityPosition);
+
+            mainMap.Center = currentLocation;
             mainMap.ZoomLevel = 12;
             mainMap.LandmarksVisible = true;
             mainMap.Heading = 0;
@@ -60,11 +66,28 @@ namespace GPSAlarm
             mainMap.ColorScheme = MapColorScheme.Light;
         }
 
-  
+
 
         private void mainMap_Loaded(object sender, RoutedEventArgs e)
         {
-            string str = "";
+            
+        }
+
+        private void mainMap_MapHolding(MapControl sender, MapInputEventArgs args)
+        {
+
+        }
+
+        private void mainMap_MapTapped(MapControl sender, MapInputEventArgs args)
+        {
+            BasicGeoposition tappedGeoposition = args.Location.Position;
+
+            //сохраним полученные кординаты в в приложении
+            ApplicationDataContainer destinationCoordinate = ApplicationData.Current.LocalSettings;
+            destinationCoordinate.Values["destinationLatitude"] = tappedGeoposition.Latitude;
+            destinationCoordinate.Values["destinationLongitude"] = tappedGeoposition.Longitude;
+
+            coord.setDestinationCoordinate(tappedGeoposition.Latitude, tappedGeoposition.Longitude);
         }
     }
 }

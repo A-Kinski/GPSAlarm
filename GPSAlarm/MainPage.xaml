@@ -15,7 +15,7 @@
             x:Name="mainMap"
             
             MapServiceToken="RrElPnhV_FQngx4Oy24m_A" 
-            Loaded="mainMap_Loaded"
+            Loaded="mainMap_Loaded" MapHolding="mainMap_MapHolding" MapTapped="mainMap_MapTapped"
            
             />
 
